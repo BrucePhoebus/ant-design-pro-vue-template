@@ -32,12 +32,12 @@ export default {
   },
   methods: {
     handleToHome () {
-      this.$router.push({ name: 'dashboard' })
+      this.$router.push({ name: 'Workplace' })
     }
   }
 }
 </script>
-<style lang="less">
+<style lang="less" type="text/less">
 @import "~ant-design-vue/lib/style/index";
 
 .exception {

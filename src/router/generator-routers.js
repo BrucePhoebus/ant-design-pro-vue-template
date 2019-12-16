@@ -34,7 +34,7 @@ const rootRouter = {
   name: 'index',
   path: '',
   component: 'BasicLayout',
-  redirect: '/dashboard',
+  redirect: '/dashboard/workplace',
   meta: {
     title: '首页'
   },
