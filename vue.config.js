@@ -30,6 +30,7 @@ const assetsCDN = {
 const vueConfig = {
   devServer: {
     port: 8000,
+    open: true,
     overlay: {
       warnings: false,
       errors: false
@@ -81,7 +82,7 @@ const vueConfig = {
   },
 
   productionSourceMap: false,
-  lintOnSave: undefined,
+  lintOnSave: false,
   transpileDependencies: []
 }
 

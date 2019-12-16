@@ -143,8 +143,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
-
 import Trend from '@/components/Trend'
 import AvatarList from '@/components/AvatarList'
 import CountDown from '@/components/CountDown/CountDown'
