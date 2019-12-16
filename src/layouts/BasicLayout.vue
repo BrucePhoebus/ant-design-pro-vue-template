@@ -46,14 +46,6 @@
           <route-view />
         </transition>
       </a-layout-content>
-
-      <!-- layout footer -->
-      <a-layout-footer>
-        <global-footer />
-      </a-layout-footer>
-
-      <!-- Setting Drawer (show in development mode) -->
-      <setting-drawer v-if="!production"></setting-drawer>
     </a-layout>
   </a-layout>
 
@@ -68,8 +60,6 @@ import config from '@/config/defaultSettings'
 import RouteView from './RouteView'
 import SideMenu from '@/components/Menu/SideMenu'
 import GlobalHeader from '@/components/GlobalHeader'
-import GlobalFooter from '@/components/GlobalFooter'
-import SettingDrawer from '@/components/SettingDrawer'
 
 export default {
   name: 'BasicLayout',
@@ -78,8 +68,6 @@ export default {
     RouteView,
     SideMenu,
     GlobalHeader,
-    GlobalFooter,
-    SettingDrawer
   },
   data () {
     return {
@@ -149,14 +137,6 @@ export default {
 </script>
 
 <style lang="less">
-/*
- * The following styles are auto-applied to elements with
- * transition="page-transition" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the page transition by editing
- * these styles.
- */
 
 .page-transition-enter {
   opacity: 0;

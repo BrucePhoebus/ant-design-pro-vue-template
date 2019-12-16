@@ -4,8 +4,7 @@
 			<div class="top">
 				<div class="header">
 					<a href="/">
-						<img src="~@/assets/logo.svg" class="logo" alt="logo">
-						<span class="title">Ant Design</span>
+						<span class="title">{{ title }}</span>
 					</a>
 				</div>
 				<div class="desc"></div>
@@ -25,12 +24,10 @@
     mixins: [mixinDevice],
     data() {
       return {
-        title: ''
+        title: process.env.VUE_APP_TITLE
       }
     },
-    created() {
-
-    },
+    created() {},
     mounted() {
       document.body.classList.add('userLayout')
     },

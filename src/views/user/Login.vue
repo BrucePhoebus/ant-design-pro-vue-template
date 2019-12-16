@@ -5,19 +5,14 @@
       class="user-layout-login"
       ref="formLogin"
       :form="form"
-      @submit="loginSubmit"
-    >
+      @submit="loginSubmit">
 			<a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误（admin/ant.design )" />
 			<a-form-item>
 				<a-input
-						v-model="username"
+						:value="username"
 						size="large"
 						type="text"
 						placeholder="请输入账号"
-						v-decorator="[
-                'username',
-                {rules: [{ required: true, message: '请输入帐户名' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
-              ]"
 				>
 					<a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
 				</a-input>
@@ -25,15 +20,10 @@
 
 			<a-form-item>
 				<a-input
-						v-model="password"
+						:value="password"
 						size="large"
 						type="password"
-						autocomplete="false"
 						placeholder="请输入密码"
-						v-decorator="[
-                'password',
-                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
-              ]"
 				>
 					<a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
 				</a-input>
@@ -66,8 +56,8 @@ export default {
   },
   data () {
     return {
-      username: '',
-      password: '',
+      username: 'admin',
+      password: 'ant.design',
       customActiveKey: 'tab1',
       loginBtn: false,
       loginType: 0,
@@ -94,16 +84,6 @@ export default {
   },
   methods: {
     ...mapActions(['Login', 'Logout']),
-    handleUsernameOrEmail (rule, value, callback) {
-      const { state } = this
-      const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
-      if (regex.test(value)) {
-        state.loginType = 0
-      } else {
-        state.loginType = 1
-      }
-      callback()
-    },
     loginSubmit (e) {
       e.preventDefault()
       const {
@@ -114,61 +94,16 @@ export default {
       } = this
 
       state.loginBtn = true
-
-      const validateFieldsKey = customActiveKey === 'tab1' ? ['username', 'password'] : ['mobile', 'captcha']
-
-      validateFields(validateFieldsKey, { force: true }, (err, values) => {
-        if (!err) {
-          const loginParams = { ...values }
-          delete loginParams.username
-          loginParams[!state.loginType ? 'email' : 'username'] = values.username
-          loginParams.password = md5(values.password)
-          Login(loginParams)
-            .then((res) => this.loginSuccess(res))
-            .catch(err => this.requestFailed(err))
-            .finally(() => {
-              state.loginBtn = false
-            })
-        } else {
-          setTimeout(() => {
-            state.loginBtn = false
-          }, 600)
-        }
-      })
-    },
-    getCaptcha (e) {
-      e.preventDefault()
-      const { form: { validateFields }, state } = this
-
-      validateFields(['mobile'], { force: true }, (err, values) => {
-        if (!err) {
-          state.smsSendBtn = true
-
-          const interval = window.setInterval(() => {
-            if (state.time-- <= 0) {
-              state.time = 60
-              state.smsSendBtn = false
-              window.clearInterval(interval)
-            }
-          }, 1000)
-
-          const hide = this.$message.loading('验证码发送中..', 0)
-          getSmsCaptcha({ mobile: values.mobile }).then(res => {
-            setTimeout(hide, 2500)
-            this.$notification['success']({
-              message: '提示',
-              description: '验证码获取成功，您的验证码为：' + res.result.captcha,
-              duration: 8
-            })
-          }).catch(err => {
-            setTimeout(hide, 1)
-            clearInterval(interval)
-            state.time = 60
-            state.smsSendBtn = false
-            this.requestFailed(err)
-          })
-        }
-      })
+      let loginParams = {
+        username: this.username,
+        password: this.password
+      }
+      Login(loginParams)
+				.then((res) => this.loginSuccess(res))
+				.catch(err => this.requestFailed(err))
+				.finally(() => {
+					state.loginBtn = false
+				})
     },
     stepCaptchaSuccess () {
       this.loginSuccess()
@@ -206,12 +141,6 @@ export default {
 .user-layout-login {
   label {
     font-size: 14px;
-  }
-
-  .getCaptcha {
-    display: block;
-    width: 100%;
-    height: 40px;
   }
 
   .forge-password {

@@ -29,7 +29,11 @@ const assetsCDN = {
 // vue.config.js
 const vueConfig = {
   devServer: {
-    port: 8000
+    port: 8000,
+    overlay: {
+      warnings: false,
+      errors: false
+    },
   },
   configureWebpack: {
     plugins: [
