@@ -9,13 +9,19 @@ export const asyncRouterMap = [
     name: 'index',
     component: BasicLayout,
     meta: { title: '首页' },
-    redirect: '/dashboard/workplace',
+    redirect: '/index',
     children: [
+      {
+        path: '/index',
+        name: 'workplace',
+        component: () => import('@/views/workplace/index'),
+        meta: { title: '工作台', keepAlive: true }
+      },
       {
         path: '/dashboard/workplace',
         name: 'Workplace',
         component: () => import('@/views/dashboard/Workplace'),
-        meta: { title: '工作台', keepAlive: true, permission: [ 'dashboard' ] }
+        meta: { title: '权限控制的工作台', keepAlive: true, permission: [ 'common_admin' ] }
       },
     ]
   },

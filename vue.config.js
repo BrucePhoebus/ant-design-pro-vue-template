@@ -26,8 +26,12 @@ const assetsCDN = {
   ]
 }
 
+const base_url = process.env.VUE_APP_BASE_URL;
+
 // vue.config.js
 const vueConfig = {
+	publicPath: base_url,
+	outputDir: 'template', //打包后的项目目录名称
   devServer: {
     port: 8000,
     open: true,
@@ -35,6 +39,7 @@ const vueConfig = {
       warnings: false,
       errors: false
     },
+		publicPath: base_url,
   },
   configureWebpack: {
     plugins: [

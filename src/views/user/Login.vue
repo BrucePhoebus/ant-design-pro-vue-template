@@ -6,7 +6,7 @@
       ref="formLogin"
       :form="form"
       @submit="loginSubmit">
-			<a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误（admin/ant.design )" />
+			<a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误" />
 			<a-form-item>
 				<a-input
 						:value="username"
@@ -45,43 +45,26 @@
 
 <script>
 import md5 from 'md5'
-import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
-import { getSmsCaptcha, get2step } from '@/api/login'
 
 export default {
-  components: {
-    TwoStepCaptcha
-  },
   data () {
     return {
-      username: 'admin',
-      password: 'ant.design',
-      customActiveKey: 'tab1',
+      username: '',
+      password: '',
       loginBtn: false,
       loginType: 0,
       isLoginError: false,
-      requiredTwoStepCaptcha: false,
-      stepCaptchaVisible: false,
       form: this.$form.createForm(this),
       state: {
         time: 60,
         loginBtn: false,
         loginType: 0,
-        smsSendBtn: false
       }
     }
   },
-  created () {
-    get2step({ })
-      .then(res => {
-        this.requiredTwoStepCaptcha = res.result.stepCode
-      })
-      .catch(() => {
-        this.requiredTwoStepCaptcha = false
-      })
-  },
+  created () {},
   methods: {
     ...mapActions(['Login', 'Logout']),
     loginSubmit (e) {
@@ -89,14 +72,13 @@ export default {
       const {
         form: { validateFields },
         state,
-        customActiveKey,
         Login
       } = this
 
       state.loginBtn = true
       let loginParams = {
         username: this.username,
-        password: this.password
+        password: md5(this.password + 'salt')
       }
       Login(loginParams)
 				.then((res) => this.loginSuccess(res))
@@ -104,15 +86,6 @@ export default {
 				.finally(() => {
 					state.loginBtn = false
 				})
-    },
-    stepCaptchaSuccess () {
-      this.loginSuccess()
-    },
-    stepCaptchaCancel () {
-      this.Logout().then(() => {
-        this.loginBtn = false
-        this.stepCaptchaVisible = false
-      })
     },
     loginSuccess (res) {
       this.$router.push({ path: '/' })
@@ -143,38 +116,11 @@ export default {
     font-size: 14px;
   }
 
-  .forge-password {
-    font-size: 14px;
-  }
-
   button.login-button {
     padding: 0 15px;
     font-size: 16px;
     height: 40px;
     width: 100%;
-  }
-
-  .user-login-other {
-    text-align: left;
-    margin-top: 24px;
-    line-height: 22px;
-
-    .item-icon {
-      font-size: 24px;
-      color: rgba(0, 0, 0, 0.2);
-      margin-left: 16px;
-      vertical-align: middle;
-      cursor: pointer;
-      transition: color 0.3s;
-
-      &:hover {
-        color: #1890ff;
-      }
-    }
-
-    .register {
-      float: right;
-    }
   }
 }
 </style>
