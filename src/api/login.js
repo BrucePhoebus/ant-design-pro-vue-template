@@ -23,36 +23,38 @@ const api = {
  * @param parameter
  * @returns {*}
  */
-export function login (parameter) {
+export function login (data) {
   return axios({
     url: '/auth/login',
     method: 'post',
-    data: parameter
+    data
   })
 }
 
-export function getSmsCaptcha (parameter) {
+export function getSmsCaptcha (data) {
   return axios({
     url: api.SendSms,
     method: 'post',
-    data: parameter
+    data
   })
 }
 
-export function getInfo () {
+export function getInfo (params) {
   return axios({
     url: '/user/info',
     method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
-    }
+    },
+		params
   })
 }
 
-export function getCurrentUserNav (token) {
+export function getCurrentUserNav (params) {
   return axios({
     url: '/user/nav',
-    method: 'get'
+    method: 'get',
+		params
   })
 }
 
@@ -70,10 +72,10 @@ export function logout () {
  * get user 2step code open?
  * @param parameter {*}
  */
-export function get2step (parameter) {
+export function get2step (data) {
   return axios({
     url: api.twoStepCode,
     method: 'post',
-    data: parameter
+    data
   })
 }

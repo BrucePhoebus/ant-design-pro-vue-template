@@ -9,9 +9,10 @@
 			<a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误" />
 			<a-form-item>
 				<a-input
-						:value="username"
+						allowClear
 						size="large"
 						type="text"
+						v-decorator="['username', formRules.username]"
 						placeholder="请输入账号"
 				>
 					<a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -20,10 +21,11 @@
 
 			<a-form-item>
 				<a-input
-						:value="password"
+						allowClear
 						size="large"
 						type="password"
 						placeholder="请输入密码"
+						v-decorator="['password', formRules.password]"
 				>
 					<a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
 				</a-input>
@@ -51,41 +53,42 @@ import { timeFix } from '@/utils/util'
 export default {
   data () {
     return {
-      username: '',
-      password: '',
       loginBtn: false,
-      loginType: 0,
       isLoginError: false,
-      form: this.$form.createForm(this),
+      form: this.$form.createForm(this, { name: 'formLogin' }),
+			formRules: {
+      	username: { rules: [{ required: true, message: '登录账号不能为空!' }], validateTrigger: 'blur' },
+      	password: { rules: [{ required: true, message: '登录密码不能为空!' }], validateTrigger: 'blur' },
+			},
       state: {
-        time: 60,
         loginBtn: false,
-        loginType: 0,
       }
     }
   },
-  created () {},
   methods: {
     ...mapActions(['Login', 'Logout']),
     loginSubmit (e) {
       e.preventDefault()
-      const {
-        form: { validateFields },
-        state,
-        Login
-      } = this
+      const { form: { validateFields }, state, Login } = this
 
       state.loginBtn = true
-      let loginParams = {
-        username: this.username,
-        password: md5(this.password + 'salt')
-      }
-      Login(loginParams)
-				.then((res) => this.loginSuccess(res))
-				.catch(err => this.requestFailed(err))
-				.finally(() => {
-					state.loginBtn = false
-				})
+			validateFields((err, values) => {
+				if (!err) {
+					const params = { ...values }
+					console.log(params)
+					Login(params)
+						.then((res) => this.loginSuccess(res))
+						.catch(err => this.requestFailed(err))
+						.finally(() => {
+							state.loginBtn = false
+					})
+				} else {
+					setTimeout(() => {
+						state.loginBtn = false
+					}, 100);
+				}
+			})
+
     },
     loginSuccess (res) {
       this.$router.push({ path: '/' })
