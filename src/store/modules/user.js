@@ -139,6 +139,7 @@ const user = {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           Vue.ls.remove(ACCESS_TOKEN)
+          Vue.ls.remove(USER_INFO)
         })
       })
     }
