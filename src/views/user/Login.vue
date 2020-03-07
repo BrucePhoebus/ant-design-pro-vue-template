@@ -46,7 +46,6 @@
 </template>
 
 <script>
-import md5 from 'md5'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 

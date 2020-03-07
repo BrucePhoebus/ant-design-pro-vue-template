@@ -18,7 +18,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'Ant Design Pro',
+      default: process.env.VUE_APP_TITLE,
       required: false
     },
     showTitle: {
