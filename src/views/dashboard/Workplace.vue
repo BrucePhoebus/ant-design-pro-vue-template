@@ -247,7 +247,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less" type="text/less" scoped>
   .project-list {
 
     .card-title {
