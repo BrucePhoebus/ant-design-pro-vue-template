@@ -7,7 +7,13 @@ module.exports = {
     'plugin:vue/strongly-recommended',
     '@vue/standard'
   ],
-  rules: {},
+  rules: {
+		// 空格
+		'no-tabs': 'off',
+		'no-trailing-spaces': 'off',
+		'no-multiple-empty-lines': 'off',
+		'indent': ['error', 'tab']
+	},
   parserOptions: {
     parser: 'babel-eslint'
   },
